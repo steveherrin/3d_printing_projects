@@ -7,14 +7,68 @@
 //    build on top of the belly
 
 
-module dog(scale_f=1) {
+module inner_dog() {
+  import("akita_centered_inner_2mm_noleg.stl", convexity=8);
+};
+
+module outer_dog() {
+  import("akita_centered_outer.stl", convexity=8);
+};
+  
+
+module dog() {
   difference() {
-    scale(scale_f*[1,1,1]) import("akita_centered_outer.stl", convexity=8);
-    scale(scale_f*[1,1,1]) import("akita_centered_inner_2mm_noleg.stl", convexity=8);
+    outer_dog();
+    inner_dog();
     // water drainage hole, lol
-    translate(scale_f*[0,53.5,-64.8]) rotate([90,0,0]) cylinder(h=10, r=2*scale_f, $fn=12);
+    translate([0,53.5,-64.8]) rotate([90,0,0]) cylinder(h=10, r=2, $fn=12);
   };
 }
+
+
+module solar_board_holder(h) {
+  difference() {
+    translate([-9.5, -7.5, 0])
+    cube([19, 15, h]);
+    for (x = [-6, 0, 6]) {
+      translate([x, 0, 0]) union() {
+        translate([-2.25,-10,-1]) cube([4.5, 20, h-7], center=false);
+        translate([0,10,h-8.25]) rotate([90,0,0]) cylinder(h=20, d=4.5, center=false, $fn=18);
+      };
+    };
+    translate([-8,-8.5,h-4]) union() {
+      cube([16, 17, 2], center=false);
+      translate([1,0,2]) cube([14, 17, 3], center=false);
+    };
+  };
+}
+
+
+module butt_solar_board_holder() {
+  intersection() {
+    outer_dog();
+    translate([0, 35, -68]) solar_board_holder(20);
+  };
+  //%translate([0, 30, -45]) solar_board();
+}
+
+
+module chest_solar_board_holder() {
+  intersection() {
+    outer_dog();
+    translate([0,-25,-30]) solar_board_holder(30);
+  };
+  //%translate([0, -20, 2]) solar_board();
+}
+
+
+module solar_board() {
+  union() {
+    cube([15,30,12], center=true);
+    cylinder(h=20, d=6);
+  };
+}
+
 
 module solar_additive() {
   translate([0,0,26.6]) rotate([0,0,45])
@@ -24,68 +78,57 @@ module solar_additive() {
   };
 }
 
-module solar_board_holder() {
-  translate([0, 35, -58])
-  difference() {
-    cube([19, 15, 20], center=true);
-    for (x = [-6, 0, 6]) {
-      translate([x, 0, 0]) union() {
-        translate([0,0,-3]) cube([4.5, 21, 13], center=true);
-        translate([0,0,3.5]) rotate([90,0,0]) cylinder(h=25, d=4.5, center=true, $fn=18);
-      };
-    };
-    translate([0,0,8]) union() {
-      cube([16, 17, 2], center=true);
-      translate([0,0,2]) cube([14, 17, 4], center=true);
-    };
-  };
-}
 
-
-module solar_board() {
-  translate([0, 30, -45]) union() {
-    cube([15,30,12], center=true);
-    cylinder(h=20, d=6);
-  };
-}
-
-
-module solar_subtractive() {
+module solar_subtractive(hole_size=20) {
    translate([0,0,31]) rotate([0,0,45]) cube([25,25,7], center=true);
-   translate([0,0,25]) rotate([0,0,45]) cube([20,20,13], center=true);
+   translate([0,0,25]) rotate([0,0,45]) cube([hole_size,hole_size,13], center=true);
 }
 
 
-module solar(location, rotation) {
+module solar(location, rotation, hole_size=20) {
   // put a hole suitable for mounting a solar panel in the children
   union() {
     for ( i = [0:1:$children-1] ) {  // step needed in case $children < 2  
       difference() {
         children(i);
-        translate(location) rotate(rotation) solar_subtractive();
+        translate(location) rotate(rotation) solar_subtractive(hole_size);
       };
     };
-    translate(location) rotate(rotation) solar_additive();
+    //translate(location) rotate(rotation) solar_additive();
   };
 }
 
-//rotate([0,0,45]) 
+solar_option = "all";
+peek_inside = false;
+
+//rotate([0,0,45])
 difference() {
-  //solar(location=[0, -22, 20], rotation=[-58, 0, 0]) {  // higher option but this isn't quite right and prints with a hole
-  solar(location=[0, 23, -38], rotation=[-56, 0, 0]) {  // lower option
-    dog();
-    solar_board_holder();  // lower option only so far
-    //%solar_board();
+  union() {
+    intersection() {
+      if (solar_option == "all" || solar_option == "chest") {
+        solar(location=[0, -20.5, 20], rotation=[-57.5, 0, 0], hole_size=17) {
+          dog();
+        };
+      };
+      if (solar_option == "all" || solar_option == "butt") {
+        solar(location=[0, 23, -38], rotation=[-56, 0, 0], hole_size=20) {
+          dog();
+        };
+      };
+    };
+    if (solar_option == "all" || solar_option == "chest") {
+      chest_solar_board_holder();
+    };
+    if (solar_option == "all" || solar_option == "butt") {
+      butt_solar_board_holder();
+    };
   };
-  //translate([10,-100,-80]) cube([40,200,200], center=false);  // see a cross-section
+  if (peek_inside) {
+    translate([10,-100,-80]) cube([40,200,200], center=false);  // see a cross-section
+  };
 };
 
-
-//difference() {
-//  solar_additive();
-//  solar_subtractive();
-//}
-
-
-//solar_board_holder();
-//translate([0, 35, -68.5]) cube([19, 15, 2], center=true);
+if (solar_option == "support_only") {
+  solar_board_holder(20);
+  translate([0, 0, 1]) cube([19, 15, 2], center=true);
+};
