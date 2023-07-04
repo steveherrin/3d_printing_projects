@@ -1,15 +1,16 @@
 // TODO
 // 1. Test the support for the PCB
-// 2. Test the lower panel position
-// 3. Either go with the lower panel position or fix the too-thin
-//    support square for the upper position
-// 4. If going with the upper position, modify the support to
-//    build on top of the belly
+// 2. Print with the "all" option and see what you like better
+
+
+solar_option = "all"; // [all, chest, butt, support_only]
+peek_inside = true;
 
 
 module inner_dog() {
   import("akita_centered_inner_2mm_noleg.stl", convexity=8);
 };
+
 
 module outer_dog() {
   import("akita_centered_outer.stl", convexity=8);
@@ -98,8 +99,6 @@ module solar(location, rotation, hole_size=20) {
   };
 }
 
-solar_option = "all";
-peek_inside = false;
 
 //rotate([0,0,45])
 difference() {
