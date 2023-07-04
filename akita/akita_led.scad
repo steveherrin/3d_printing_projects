@@ -1,10 +1,12 @@
 // TODO
 // 1. Test the support for the PCB
 // 2. Print with the "all" option and see what you like better
+// 3. Look at what inductor is used, consider swapping to a
+//    smaller size
 
 
 solar_option = "all"; // [all, chest, butt, support_only]
-peek_inside = true;
+peek_inside = false;
 
 
 module inner_dog() {
@@ -15,7 +17,7 @@ module inner_dog() {
 module outer_dog() {
   import("akita_centered_outer.stl", convexity=8);
 };
-  
+
 
 module dog() {
   difference() {
@@ -38,7 +40,7 @@ module solar_board_holder(h) {
       };
     };
     translate([-8,-8.5,h-4]) union() {
-      cube([16, 17, 2], center=false);
+      cube([16, 17, 3], center=false);
       translate([1,0,2]) cube([14, 17, 3], center=false);
     };
   };
