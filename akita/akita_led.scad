@@ -1,8 +1,11 @@
 // TODO
-// 1. Test the support for the PCB
-// 2. Print with the "all" option and see what you like better
-// 3. Look at what inductor is used, consider swapping to a
-//    smaller size
+// 1. go with the butt panel
+// 2. move a couple vertices on his back, either beefing up the outer
+//    (less preferred) or slimmed down the inner (preferred) to give
+//    the solar panel more support
+// 3. test print of just the adjusted back and hole, not the full dog
+// 4. tweak the board mount to have a little less lip or rounded lip
+// 5. think about water ingress. coat the board? where will drips go?
 
 
 solar_option = "all"; // [all, chest, butt, support_only]
