@@ -8,12 +8,12 @@
 // 5. think about water ingress. coat the board? where will drips go?
 
 
-solar_option = "all"; // [all, chest, butt, support_only]
+solar_option = "butt"; // [all, chest, butt, support_only]
 peek_inside = false;
 
 
 module inner_dog() {
-  import("akita_centered_inner_2mm_noleg.stl", convexity=8);
+  import("akita_centered_inner_2mm_noleg_solardent.stl", convexity=8);
 };
 
 
@@ -44,7 +44,9 @@ module solar_board_holder(h) {
     };
     translate([-8,-8.5,h-4]) union() {
       cube([16, 17, 3], center=false);
-      translate([1,0,2]) cube([14, 17, 3], center=false);
+      // this was translate([1,...]) cube([14,...]) and I have tried
+      // this to make the lip less promenent but I have not tested it
+      translate([0.5,0,2]) cube([15, 17, 3], center=false);
     };
   };
 }
@@ -104,8 +106,20 @@ module solar(location, rotation, hole_size=20) {
   };
 }
 
+module for_test_print() {
+  // so I can just print the part where the solar panel goes to test fit
+  difference() {
+    intersection() {
+      children(0);
+      translate([0, 32, -39]) cube([70,64,68], center=true);
+    };
+    translate([0,64,-15]) sphere(r=15);
+  };
+}
+
 
 //rotate([0,0,45])
+//for_test_print() {
 difference() {
   union() {
     intersection() {
@@ -115,7 +129,7 @@ difference() {
         };
       };
       if (solar_option == "all" || solar_option == "butt") {
-        solar(location=[0, 23, -38], rotation=[-56, 0, 0], hole_size=20) {
+        solar(location=[0, 22, -39], rotation=[-56, 0, 0], hole_size=20) {
           dog();
         };
       };
