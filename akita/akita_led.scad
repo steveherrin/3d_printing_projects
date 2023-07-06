@@ -1,11 +1,7 @@
 // TODO
-// 1. go with the butt panel
-// 2. move a couple vertices on his back, either beefing up the outer
-//    (less preferred) or slimmed down the inner (preferred) to give
-//    the solar panel more support
-// 3. test print of just the adjusted back and hole, not the full dog
-// 4. tweak the board mount to have a little less lip or rounded lip
-// 5. think about water ingress. coat the board? where will drips go?
+// 1. decide what to do about the lip for the board holder
+// 2. think about water ingress. coat the board? where will drips go?
+// 3. full print
 
 
 solar_option = "butt"; // [all, chest, butt, support_only]
@@ -44,9 +40,7 @@ module solar_board_holder(h) {
     };
     translate([-8,-8.5,h-4]) union() {
       cube([16, 17, 3], center=false);
-      // this was translate([1,...]) cube([14,...]) and I have tried
-      // this to make the lip less promenent but I have not tested it
-      translate([0.5,0,2]) cube([15, 17, 3], center=false);
+      translate([1,0,2]) cube([14, 17, 3], center=false);
     };
   };
 }
@@ -145,8 +139,9 @@ difference() {
     translate([10,-100,-80]) cube([40,200,200], center=false);  // see a cross-section
   };
 };
+//};
 
 if (solar_option == "support_only") {
-  solar_board_holder(20);
+  solar_board_holder(15);
   translate([0, 0, 1]) cube([19, 15, 2], center=true);
 };
