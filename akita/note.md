@@ -1,0 +1,1 @@
+Modified from [Low Poly American Akita](https://www.thingiverse.com/thing:4675212) by [DiirtySanchez](https://www.thingiverse.com/DiirtySanchez)
