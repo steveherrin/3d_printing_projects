@@ -1,7 +1,8 @@
 // This is a replacement weight holder for a sonic shaking ghost toy.
 //
 // There were several different designs over generations of the toy,
-// and this copies one of them, but should work for any.
+// and this copies one of them, but should work for the ones that
+// have a weight sitting in a cup.
 //
 // You will probably need to drill out the holes for a good fit.
 // I found a 5/16 inch drill bit was about right.
