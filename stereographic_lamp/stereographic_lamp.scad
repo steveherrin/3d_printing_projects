@@ -33,13 +33,15 @@ pattern = "hex";
 // Constants that define the overall dimensions.
 // You can try adjusting these but not all combinations may produce a printable object.
 diameter = 160;  // the diameter of the lamp
-shade_thickness = 4;  // thickness of the shell of the shade
+shade_thickness = 2.5;  // thickness of the shell of the shade
 stand_thickness = 2;  // thickness of the base of the stand/hanger
 base_fraction = .25;  // the fraction of the sphere that is support legs, and not pattern
-base_leg_thickness = 8;  // thickness of the legs that support the shade
+base_leg_thickness = 5;  // thickness of the legs that support the shade
 base_leg_width = 10;  // width of the legs that support the shade
-led_holder_diameter = 32; // diameter of the cylinder that holds the LED
+led_holder_thickness = 5;  // wall thickness of the cylinder around the LED
+led_board_diameter = 25.6;  // diameter of circle where LED PCB sits
 
+led_holder_diameter = led_board_diameter + led_holder_thickness;
 radius = diameter / 2;
 
 
@@ -278,7 +280,7 @@ module led_holder() {
             union() {
                 difference() {
                     cylinder(h=shield_height, d=led_holder_diameter, $fn=36);
-                    translate([0, 0, 1]) cylinder(h=shield_height+1, d=25.6, $fn=36);
+                    translate([0, 0, 1]) cylinder(h=shield_height+1, d=led_board_diameter, $fn=36);
                     cylinder(h=1, d=15, $fn=36);
                     rotate([0,0,-30]) screw_holes();
                 }
