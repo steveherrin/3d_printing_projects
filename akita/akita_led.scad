@@ -26,6 +26,20 @@ module water_drainage_hole() {
 module solar_board_holder(height) {
   difference() {
     translate([-9.5, -7.5, 0])
+    cube([19, 15, height-4]);
+    for (x = [-6, 0, 6]) {
+      translate([x, 0, 0]) union() {
+        translate([-2.25,-10,-1]) cube([4.5, 20, height-7], center=false);
+        translate([0,10,height-8.25]) rotate([90,0,0]) cylinder(h=20, d=4.5, center=false, $fn=18);
+      };
+    };
+    translate([0, 4, height-7]) cylinder(d=1.8, h=4, $fn=18);
+  };
+}
+
+module solar_board_holder_lip(height) {
+  difference() {
+    translate([-9.5, -7.5, 0])
     cube([19, 15, height]);
     for (x = [-6, 0, 6]) {
       translate([x, 0, 0]) union() {
@@ -37,6 +51,7 @@ module solar_board_holder(height) {
       cube([16, 17, 3], center=false);
       translate([1,0,2]) cube([14, 17, 3], center=false);
     };
+    translate([0, 4, height-7]) cylinder(d=1.8, h=4, $fn=18);
   };
 }
 
