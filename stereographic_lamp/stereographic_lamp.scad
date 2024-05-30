@@ -33,7 +33,7 @@ pattern = "hex";
 // Constants that define the overall dimensions.
 // You can try adjusting these but not all combinations may produce a printable object.
 diameter = 160;  // the diameter of the lamp
-shade_thickness = 2.5;  // thickness of the shell of the shade
+shade_thickness = 3.6;  // thickness of the shell of the shade
 stand_thickness = 2;  // thickness of the base of the stand/hanger
 base_fraction = .25;  // the fraction of the sphere that is support legs, and not pattern
 base_leg_thickness = 5;  // thickness of the legs that support the shade
