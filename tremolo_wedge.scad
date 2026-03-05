@@ -1,10 +1,11 @@
-thickness_flat = 5;
-thickness_wedge_tip = 3;
-thickness_wedge_base = 8;
-
 gap_bridge = 14.5;
 depth = 28;
 height_top = 8;
+
+thickness_flat = 5;
+thickness_wedge_tip = 2;
+thickness_wedge_base = 10;
+wedge_n_steps = 14; // should divide depth into a multiple of your step height, or use 0 for smooth ramp
 
 width_prong = 10;
 gap_prongs = 10;
@@ -19,16 +20,23 @@ module wedge() {
   union() {
     cube([thickness_flat, width_prong, depth + height_top]);
     translate([thickness_flat, 0, depth]) cube([gap_bridge, width_prong, height_top]);
+    ramp(wedge_n_steps, wedge_x_lo, wedge_x_hi_z_lo, wedge_x_hi_z_hi);
+    translate([wedge_x_lo, 0, depth]) cube([thickness_wedge_base, width_prong, height_top]);
+  };
+};
+
+module ramp(n_steps, x_lo, x_hi_z_lo, x_hi_z_hi) {
+  if(n_steps < 1) {
     polyhedron(
       [
-        [wedge_x_lo, 0, 0],
-        [wedge_x_hi_z_lo, 0, 0],
-        [wedge_x_hi_z_lo, width_prong, 0],
-        [wedge_x_lo, width_prong, 0],
-        [wedge_x_lo, 0, depth],
-        [wedge_x_hi_z_hi, 0, depth],
-        [wedge_x_hi_z_hi, width_prong, depth],
-        [wedge_x_lo, width_prong, depth],
+        [x_lo, 0, 0],
+        [x_hi_z_lo, 0, 0],
+        [x_hi_z_lo, width_prong, 0],
+        [x_lo, width_prong, 0],
+        [x_lo, 0, depth],
+        [x_hi_z_hi, 0, depth],
+        [x_hi_z_hi, width_prong, depth],
+        [x_lo, width_prong, depth],
       ],
       [
         [0,1,2,3],
@@ -39,9 +47,16 @@ module wedge() {
         [7,4,0,3],
       ]
     );
-    translate([wedge_x_lo, 0, depth]) cube([thickness_wedge_base, width_prong, thickness_wedge_base]);
-  };
-};
+  } else {
+    z_step = depth / n_steps;
+    x_min = x_hi_z_lo - x_lo;
+    x_step = (x_hi_z_hi - x_hi_z_lo) / (wedge_n_steps-1);
+    translate([x_hi_z_lo-x_min,0,0]) for (i = [0:1:(n_steps-1)]) {
+      translate([0,0,i*z_step]) cube([i*x_step+x_min, width_prong, z_step], center=false);
+    };
+  }
+}
+
 
 
 module double() {  
@@ -57,5 +72,6 @@ module single() {
   rotate([90, 0,0]) wedge();
 }
 
+echo(str("the step height is ", depth / wedge_n_steps, " which should be a multiple of your layer height"));
 //single();
 double();
